@@ -44,9 +44,9 @@ class ContactWayClient extends BaseClient
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function list()
+    public function list(array $params)
     {
-        return $this->httpPostJson('cgi-bin/externalcontact/list_contact_way');
+        return $this->httpPostJson('cgi-bin/externalcontact/list_contact_way',$params);
     }
 
     /**
