@@ -43,6 +43,7 @@ use EasyWeChat\Kernel\ServiceContainer;
  * @property \EasyWeChat\MiniProgram\Search\Client              $search
  * @property \EasyWeChat\MiniProgram\Live\Client                $live
  * @property \EasyWeChat\MiniProgram\Broadcast\Client           $broadcast
+ * @property \EasyWeChat\MiniProgram\Shop\ForwardsShop          $shop
  */
 class Application extends ServiceContainer
 {
@@ -74,6 +75,7 @@ class Application extends ServiceContainer
         // Base services
         BasicService\Media\ServiceProvider::class,
         BasicService\ContentSecurity\ServiceProvider::class,
+        Shop\ServiceProvider::class,
     ];
 
     /**
