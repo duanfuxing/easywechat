@@ -35,8 +35,8 @@ class ServiceProvider implements ServiceProviderInterface
         $app['shop.delivery'] = function ($app) {
             return new DeliveryClient($app);
         };
-        $app['shop.ecaftersale'] = function ($app) {
-            return new EcaftersaleClient($app);
+        $app['shop.aftersale'] = function ($app) {
+            return new AftersaleClient($app);
         };
         $app['shop.coupon'] = function ($app) {
             return new CouponClient($app);

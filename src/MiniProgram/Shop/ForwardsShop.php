@@ -9,8 +9,8 @@ namespace EasyWeChat\MiniProgram\Shop;
  * @property \EasyWeChat\MiniProgram\Shop\RegisterClient    $register
  * @property \EasyWeChat\MiniProgram\Shop\SpuClient         $spu
  * @property \EasyWeChat\MiniProgram\Shop\OrderClient       $order
- * @property \EasyWeChat\MiniProgram\Shop\DeliveryClient    $DeliveryClient
- * @property \EasyWeChat\MiniProgram\Shop\EcaftersaleClient $EcaftersaleClient
+ * @property \EasyWeChat\MiniProgram\Shop\DeliveryClient    $Delivery
+ * @property \EasyWeChat\MiniProgram\Shop\AftersaleClient   $aftersale
  * @property \EasyWeChat\MiniProgram\Shop\CouponClient      $coupon
  * @property \EasyWeChat\MiniProgram\Shop\FundsClient       $funds
  * @property \EasyWeChat\MiniProgram\Shop\WxPayClient       $wxpay
