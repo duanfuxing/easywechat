@@ -89,6 +89,39 @@ class Client extends BaseClient
     }
 
     /**
+     * @param int $privacyVer
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getPrivacy(int $privacyVer)
+    {
+        return $this->httpPostJson('cgi-bin/component/getprivacysetting', [
+            'privacy_ver' => $privacyVer
+        ]);
+    }
+
+    /**
+     * @param int $privacyVer
+     * @param array $settingList
+     * @param array $ownerSetting
+     * @param array $sdkPrivacyInfoList
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function setPrivacy(int $privacyVer, array $settingList, array $ownerSetting, array $sdkPrivacyInfoList = [])
+    {
+        return $this->httpPostJson('cgi-bin/component/setprivacysetting', [
+            'privacy_ver'           => $privacyVer,
+            'setting_list'          => $settingList,
+            'owner_setting'         => $ownerSetting,
+            'sdk_privacy_info_list' => $sdkPrivacyInfoList
+        ]);
+    }
+
+
+    /**
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      *
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
