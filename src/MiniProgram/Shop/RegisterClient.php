@@ -89,14 +89,14 @@ class RegisterClient extends BaseClient
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function uploadImg($respType, $uploadType, $media,$imgUrl = null)
+    public function uploadImg($respType, $uploadType,$imgUrl = null)
     {
         $params = [
             'resp_type'   => $respType,
             'upload_type' => $uploadType,
             'img_url'     => $imgUrl,
         ];
-        return $this->httpUpload('shop/img/upload',['media'=>$media], $params);
+        return $this->httpUpload('shop/img/upload',[], $params);
     }
 
     /**
