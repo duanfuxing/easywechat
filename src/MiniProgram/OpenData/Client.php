@@ -104,4 +104,16 @@ class Client extends BaseClient
 
         return $this->httpPostJson('generate_urllink', $data);
     }
+
+    /**
+     * 获取不限制的小程序码-返回数据流
+     * @param array $params
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function generateUnLimitCode(array $params)
+    {
+        return $this->request('getwxacodeunlimit', 'POST', ['query' => [], 'json' => $params],true);
+    }
 }
