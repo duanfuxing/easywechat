@@ -106,6 +106,24 @@ class Client extends BaseClient
     }
 
     /**
+     * 小程序 Short Link
+     * @param array $params
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function generateShortLink(array $params)
+    {
+        $data = [
+            'page_url'     => $params['page_url'] ?? '',
+            'page_title'   => $params['page_title'] ?? '',
+            'is_permanent' => $params['is_permanent'] ?? false,
+        ];
+
+        return $this->httpPostJson('genwxashortlink', $data);
+    }
+
+    /**
      * 获取不限制的小程序码-返回数据流
      * @param array $params
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
@@ -114,6 +132,6 @@ class Client extends BaseClient
      */
     public function generateUnLimitCode(array $params)
     {
-        return $this->request('getwxacodeunlimit', 'POST', ['query' => [], 'json' => $params],true);
+        return $this->request('getwxacodeunlimit', 'POST', ['query' => [], 'json' => $params], true);
     }
 }
