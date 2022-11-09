@@ -220,4 +220,25 @@ class Client extends BaseClient
 
         return $this->httpGet('cgi-bin/corp/get_join_qrcode', ['size_type' => $sizeType]);
     }
+
+    /**
+     * 将代开发应用或第三方应用获取的密文open_userid转换为明文userid。
+     * @param array $params
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     * @throws InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function openUserIdToUserId(array $params)
+    {
+        if (!isset($params['open_userid_list']) || empty($params['open_userid_list'])) {
+            throw new InvalidArgumentException('The open_userid_list is required');
+        }
+
+        if (!isset($params['source_agentid']) || empty($params['source_agentid'])) {
+            throw new InvalidArgumentException('The source_agentid is required');
+        }
+
+        return $this->httpPostJson('cgi-bin/batch/openuserid_to_userid',$params);
+    }
 }
