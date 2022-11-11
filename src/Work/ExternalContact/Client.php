@@ -301,4 +301,33 @@ class Client extends BaseClient
     {
         return $this->httpPostJson('cgi-bin/externalcontact/unionid_to_external_userid', $params);
     }
+
+    /**
+     * 将企业主体下的external_userid转换为服务商主体下的external_userid。
+     * @param array $params
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getNewExternalUserId(array $params)
+    {
+        return $this->httpPostJson('cgi-bin/externalcontact/get_new_external_userid', ['external_userid_list' => $params]);
+    }
+
+    /**
+     * 将代开发应用或第三方应用获取的externaluserid转换成自建应用的externaluserid
+     * @param string $userId
+     * @param string $agentid
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function fromServiceExternalUserId(string $userId, string $agentid)
+    {
+        $params = [
+            'external_userid' => $userId,
+            'source_agentid'  => $agentid,
+        ];
+        return $this->httpPostJson('cgi-bin/externalcontact/from_service_external_userid', $params);
+    }
 }
