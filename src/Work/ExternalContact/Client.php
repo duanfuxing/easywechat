@@ -330,4 +330,44 @@ class Client extends BaseClient
         ];
         return $this->httpPostJson('cgi-bin/externalcontact/from_service_external_userid', $params);
     }
+
+    /**
+     * unionId转第三方的externalUserId
+     * @desc pendingId OR externalUserId
+     * @param string $unionid
+     * @param string $openid
+     * @param null $subjectType
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function unionIdToExternalUserIdForServer(string $unionid, string $openid, $subjectType = null)
+    {
+        $params = [
+            'unionid' => $unionid,
+            'openid'  => $openid,
+        ];
+        !empty($subjectType) && $params['subject_type'] = $subjectType;
+        return $this->httpPostJson('cgi-bin/idconvert/unionid_to_external_userid', $params);
+    }
+
+
+    /**
+     * external_userid查询pending_id
+     * @desc pendingId expireTime 90days
+     * @param array $externalUserId
+     * @param null $chatId
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function externalUserIdToPendingId(array $externalUserId, $chatId = null)
+    {
+        $params = [
+            'external_userid' => $externalUserId,
+        ];
+        !empty($chatId) && $params['chat_id'] = $chatId;
+        return $this->httpPostJson('cgi-bin/idconvert/batch/external_userid_to_pending_id', $params);
+    }
+
 }
