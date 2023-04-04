@@ -53,5 +53,9 @@ class ServiceProvider implements ServiceProviderInterface
         $app['customer_strategy'] = function ($app){
             return new CustomerStrategyClient($app);
         };
+
+        $app['moment'] = function ($app){
+            return new Moment($app);
+        };
     }
 }
