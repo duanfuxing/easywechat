@@ -100,4 +100,21 @@ class Client extends BaseClient
 
         return $this->httpUpload('cgi-bin/media/upload', $files, [], compact('type'));
     }
+
+    /**
+     * 上传附件资源
+     * @param string $mediaType
+     * @param string $attachmentType
+     * @param string $path
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function uploadAttachment(string $mediaType, string $attachmentType, string $path)
+    {
+        $files = [
+            'media' => $path,
+        ];
+        return $this->httpUpload('cgi-bin/media/upload_attachment', $files, [], ['media_type' => $mediaType, 'attachment_type' => $attachmentType]);
+    }
 }
