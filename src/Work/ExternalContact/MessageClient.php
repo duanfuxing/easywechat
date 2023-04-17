@@ -153,6 +153,36 @@ class MessageClient extends BaseClient
     }
 
     /**
+     * 提醒成员群发
+     * @param string $msgId
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function remindGroupMsgSend(string $msgId)
+    {
+        $params = [
+            'msgid'  => $msgId,
+        ];
+        return $this->httpPostJson('cgi-bin/externalcontact/remind_groupmsg_send', $params);
+    }
+
+    /**
+     * 停止企业群发
+     * @param string $msgId
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function cancelGroupMsgSend(string $msgId)
+    {
+        $params = [
+            'msgid'  => $msgId,
+        ];
+        return $this->httpPostJson('cgi-bin/externalcontact/cancel_groupmsg_send', $params);
+    }
+
+    /**
      * 发送新客户欢迎语.
      *
      * @see https://work.weixin.qq.com/api/doc#90000/90135/91688
