@@ -104,11 +104,13 @@ class MessageClient extends BaseClient
             'chat_type'   => $chatType,
             'start_time'  => $startTime,
             'end_time'    => $endTime,
-            'creator'     => $creator,
             'filter_type' => $filterType,
             'limit'       => $limit,
             'cursor'      => $cursor,
         ];
+        if (!empty($creator)) {
+            $params['creator'] = $creator;
+        }
         return $this->httpPostJson('cgi-bin/externalcontact/get_groupmsg_list_v2', $params);
     }
 
@@ -162,7 +164,7 @@ class MessageClient extends BaseClient
     public function remindGroupMsgSend(string $msgId)
     {
         $params = [
-            'msgid'  => $msgId,
+            'msgid' => $msgId,
         ];
         return $this->httpPostJson('cgi-bin/externalcontact/remind_groupmsg_send', $params);
     }
@@ -177,7 +179,7 @@ class MessageClient extends BaseClient
     public function cancelGroupMsgSend(string $msgId)
     {
         $params = [
-            'msgid'  => $msgId,
+            'msgid' => $msgId,
         ];
         return $this->httpPostJson('cgi-bin/externalcontact/cancel_groupmsg_send', $params);
     }
