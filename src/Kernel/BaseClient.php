@@ -102,7 +102,7 @@ class BaseClient
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function httpUpload(string $url, array $files = [], array $form = [], array $query = [])
+    public function httpUpload(string $url, array $files = [], array $form = [], array $query = [],string $fileName = '')
     {
         $multipart = [];
 
@@ -110,6 +110,7 @@ class BaseClient
             $multipart[] = [
                 'name' => $name,
                 'contents' => fopen($path, 'r'),
+	        'filename'=> $fileName
             ];
         }
 
