@@ -74,6 +74,7 @@ class Application extends ServiceContainer
         Schedule\ServiceProvider::class,
         MsgAudit\ServiceProvider::class,
         Live\ServiceProvider::class,
+        CorpGroup\ServiceProvider::class,
     ];
 
     /**

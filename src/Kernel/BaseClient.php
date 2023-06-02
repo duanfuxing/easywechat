@@ -27,218 +27,225 @@ use Psr\Log\LogLevel;
  */
 class BaseClient
 {
-    use HasHttpRequests { request as performRequest; }
+	use HasHttpRequests {
+		request as performRequest;
+	}
 
-    /**
-     * @var \EasyWeChat\Kernel\ServiceContainer
-     */
-    protected $app;
+	/**
+	 * @var \EasyWeChat\Kernel\ServiceContainer
+	 */
+	protected $app;
 
-    /**
-     * @var \EasyWeChat\Kernel\Contracts\AccessTokenInterface
-     */
-    protected $accessToken;
+	/**
+	 * @var \EasyWeChat\Kernel\Contracts\AccessTokenInterface
+	 */
+	protected $accessToken;
 
-    /**
-     * @var string
-     */
-    protected $baseUri;
+	/**
+	 * @var string
+	 */
+	protected $baseUri;
 
-    /**
-     * BaseClient constructor.
-     *
-     * @param \EasyWeChat\Kernel\ServiceContainer $app
-     */
-    public function __construct(ServiceContainer $app, AccessTokenInterface $accessToken = null)
-    {
-        $this->app = $app;
-        $this->accessToken = $accessToken ?? $this->app['access_token'];
-    }
+	/**
+	 * BaseClient constructor.
+	 *
+	 * @param \EasyWeChat\Kernel\ServiceContainer $app
+	 */
+	public function __construct(ServiceContainer $app, AccessTokenInterface $accessToken = null)
+	{
+		$this->app = $app;
+		$this->accessToken = $accessToken ?? $this->app['access_token'];
+	}
 
-    /**
-     * GET request.
-     *
-     * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function httpGet(string $url, array $query = [])
-    {
-        return $this->request($url, 'GET', ['query' => $query]);
-    }
+	/**
+	 * GET request.
+	 *
+	 * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+	 *
+	 * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+	 * @throws \GuzzleHttp\Exception\GuzzleException
+	 */
+	public function httpGet(string $url, array $query = [])
+	{
+		return $this->request($url, 'GET', ['query' => $query]);
+	}
 
-    /**
-     * POST request.
-     *
-     * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function httpPost(string $url, array $data = [])
-    {
-        return $this->request($url, 'POST', ['form_params' => $data]);
-    }
+	/**
+	 * POST request.
+	 *
+	 * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+	 *
+	 * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+	 * @throws \GuzzleHttp\Exception\GuzzleException
+	 */
+	public function httpPost(string $url, array $data = [])
+	{
+		return $this->request($url, 'POST', ['form_params' => $data]);
+	}
 
-    /**
-     * JSON request.
-     *
-     * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function httpPostJson(string $url, array $data = [], array $query = [])
-    {
-        return $this->request($url, 'POST', ['query' => $query, 'json' => $data]);
-    }
+	/**
+	 * JSON request.
+	 *
+	 * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+	 *
+	 * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+	 * @throws \GuzzleHttp\Exception\GuzzleException
+	 */
+	public function httpPostJson(string $url, array $data = [], array $query = [])
+	{
+		return $this->request($url, 'POST', ['query' => $query, 'json' => $data]);
+	}
 
-    /**
-     * Upload file.
-     *
-     * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function httpUpload(string $url, array $files = [], array $form = [], array $query = [],string $fileName = '')
-    {
-        $multipart = [];
+	/**
+	 * Upload file.
+	 *
+	 * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+	 *
+	 * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+	 * @throws \GuzzleHttp\Exception\GuzzleException
+	 */
+	public function httpUpload(string $url, array $files = [], array $form = [], array $query = [], string $fileName = '')
+	{
+		$multipart = [];
 
-        foreach ($files as $name => $path) {
-            $multipart[] = [
-                'name' => $name,
-                'contents' => fopen($path, 'r'),
-	        'filename'=> $fileName
-            ];
-        }
+		foreach ($files as $name => $path) {
+			if (empty($fileName)) {
+				$fileName = pathinfo($path)['basename'];
+			}
+			$multipart[] = [
+				'name'     => $name,
+				'contents' => fopen($path, 'r'),
+				'headers'  => [
+					'Content-Disposition' => sprintf('form-data; name="%s";filename="%s";', $name, $fileName)
+				]
+			];
+		}
 
-        foreach ($form as $name => $contents) {
-            $multipart[] = compact('name', 'contents');
-        }
+		foreach ($form as $name => $contents) {
+			$multipart[] = compact('name', 'contents');
+		}
 
-        return $this->request($url, 'POST', ['query' => $query, 'multipart' => $multipart, 'connect_timeout' => 30, 'timeout' => 30, 'read_timeout' => 30]);
-    }
+		return $this->request($url, 'POST', ['query' => $query, 'multipart' => $multipart, 'connect_timeout' => 30, 'timeout' => 30, 'read_timeout' => 30]);
+	}
 
-    public function getAccessToken(): AccessTokenInterface
-    {
-        return $this->accessToken;
-    }
+	public function getAccessToken(): AccessTokenInterface
+	{
+		return $this->accessToken;
+	}
 
-    /**
-     * @return $this
-     */
-    public function setAccessToken(AccessTokenInterface $accessToken)
-    {
-        $this->accessToken = $accessToken;
+	/**
+	 * @return $this
+	 */
+	public function setAccessToken(AccessTokenInterface $accessToken)
+	{
+		$this->accessToken = $accessToken;
 
-        return $this;
-    }
+		return $this;
+	}
 
-    /**
-     * @param bool $returnRaw
-     *
-     * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function request(string $url, string $method = 'GET', array $options = [], $returnRaw = false)
-    {
-        if (empty($this->middlewares)) {
-            $this->registerHttpMiddlewares();
-        }
+	/**
+	 * @param bool $returnRaw
+	 *
+	 * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
+	 *
+	 * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+	 * @throws \GuzzleHttp\Exception\GuzzleException
+	 */
+	public function request(string $url, string $method = 'GET', array $options = [], $returnRaw = false)
+	{
+		if (empty($this->middlewares)) {
+			$this->registerHttpMiddlewares();
+		}
 
-        $response = $this->performRequest($url, $method, $options);
+		$response = $this->performRequest($url, $method, $options);
 
-        $this->app->events->dispatch(new Events\HttpResponseCreated($response));
+		$this->app->events->dispatch(new Events\HttpResponseCreated($response));
 
-        return $returnRaw ? $response : $this->castResponseToType($response, $this->app->config->get('response_type'));
-    }
+		return $returnRaw ? $response : $this->castResponseToType($response, $this->app->config->get('response_type'));
+	}
 
-    /**
-     * @return \EasyWeChat\Kernel\Http\Response
-     *
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
-     */
-    public function requestRaw(string $url, string $method = 'GET', array $options = [])
-    {
-        return Response::buildFromPsrResponse($this->request($url, $method, $options, true));
-    }
+	/**
+	 * @return \EasyWeChat\Kernel\Http\Response
+	 *
+	 * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+	 * @throws \GuzzleHttp\Exception\GuzzleException
+	 */
+	public function requestRaw(string $url, string $method = 'GET', array $options = [])
+	{
+		return Response::buildFromPsrResponse($this->request($url, $method, $options, true));
+	}
 
-    /**
-     * Register Guzzle middlewares.
-     */
-    protected function registerHttpMiddlewares()
-    {
-        // retry
-        $this->pushMiddleware($this->retryMiddleware(), 'retry');
-        // access token
-        $this->pushMiddleware($this->accessTokenMiddleware(), 'access_token');
-        // log
-        $this->pushMiddleware($this->logMiddleware(), 'log');
-    }
+	/**
+	 * Register Guzzle middlewares.
+	 */
+	protected function registerHttpMiddlewares()
+	{
+		// retry
+		$this->pushMiddleware($this->retryMiddleware(), 'retry');
+		// access token
+		$this->pushMiddleware($this->accessTokenMiddleware(), 'access_token');
+		// log
+		$this->pushMiddleware($this->logMiddleware(), 'log');
+	}
 
-    /**
-     * Attache access token to request query.
-     *
-     * @return \Closure
-     */
-    protected function accessTokenMiddleware()
-    {
-        return function (callable $handler) {
-            return function (RequestInterface $request, array $options) use ($handler) {
-                if ($this->accessToken) {
-                    $request = $this->accessToken->applyToRequest($request, $options);
-                }
+	/**
+	 * Attache access token to request query.
+	 *
+	 * @return \Closure
+	 */
+	protected function accessTokenMiddleware()
+	{
+		return function (callable $handler) {
+			return function (RequestInterface $request, array $options) use ($handler) {
+				if ($this->accessToken) {
+					$request = $this->accessToken->applyToRequest($request, $options);
+				}
 
-                return $handler($request, $options);
-            };
-        };
-    }
+				return $handler($request, $options);
+			};
+		};
+	}
 
-    /**
-     * Log the request.
-     *
-     * @return \Closure
-     */
-    protected function logMiddleware()
-    {
-        $formatter = new MessageFormatter($this->app['config']['http.log_template'] ?? MessageFormatter::DEBUG);
+	/**
+	 * Log the request.
+	 *
+	 * @return \Closure
+	 */
+	protected function logMiddleware()
+	{
+		$formatter = new MessageFormatter($this->app['config']['http.log_template'] ?? MessageFormatter::DEBUG);
 
-        return Middleware::log($this->app['logger'], $formatter, LogLevel::DEBUG);
-    }
+		return Middleware::log($this->app['logger'], $formatter, LogLevel::DEBUG);
+	}
 
-    /**
-     * Return retry middleware.
-     *
-     * @return \Closure
-     */
-    protected function retryMiddleware()
-    {
-        return Middleware::retry(function (
-            $retries,
-            RequestInterface $request,
-            ResponseInterface $response = null
-        ) {
-            // Limit the number of retries to 2
-            if ($retries < $this->app->config->get('http.max_retries', 1) && $response && $body = $response->getBody()) {
-                // Retry on server errors
-                $response = json_decode($body, true);
+	/**
+	 * Return retry middleware.
+	 *
+	 * @return \Closure
+	 */
+	protected function retryMiddleware()
+	{
+		return Middleware::retry(function (
+			$retries,
+			RequestInterface $request,
+			ResponseInterface $response = null
+		) {
+			// Limit the number of retries to 2
+			if ($retries < $this->app->config->get('http.max_retries', 1) && $response && $body = $response->getBody()) {
+				// Retry on server errors
+				$response = json_decode($body, true);
 
-                if (!empty($response['errcode']) && in_array(abs($response['errcode']), [40001, 40014, 42001], true)) {
-                    $this->accessToken->refresh();
-                    $this->app['logger']->debug('Retrying with refreshed access token.');
+				if (!empty($response['errcode']) && in_array(abs($response['errcode']), [40001, 40014, 42001], true)) {
+					$this->accessToken->refresh();
+					$this->app['logger']->debug('Retrying with refreshed access token.');
 
-                    return true;
-                }
-            }
+					return true;
+				}
+			}
 
-            return false;
-        }, function () {
-            return abs($this->app->config->get('http.retry_delay', 500));
-        });
-    }
+			return false;
+		}, function () {
+			return abs($this->app->config->get('http.retry_delay', 500));
+		});
+	}
 }
