@@ -69,4 +69,50 @@ class Client extends BaseClient
 	{
 		return $this->httpPostJson('cgi-bin/corpgroup/batch/external_userid_to_pending_id', $data);
 	}
+
+	/**
+	 * 获取上下游列表
+	 * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+	 * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+	 * @throws \GuzzleHttp\Exception\GuzzleException
+	 */
+	public function getChainList()
+	{
+		return $this->httpGet('cgi-bin/corpgroup/corp/get_chain_list');
+	}
+
+	/**
+	 * 获取上下游通讯录分组
+	 * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+	 * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+	 * @throws \GuzzleHttp\Exception\GuzzleException
+	 */
+	public function getChainGroup(string $chainId)
+	{
+		return $this->httpPostJson('cgi-bin/corpgroup/corp/get_chain_group', ['chain_id' => $chainId]);
+	}
+
+	/**
+	 * 获取企业上下游通讯录分组下的企业详情列表
+	 * @param array $data
+	 * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+	 * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+	 * @throws \GuzzleHttp\Exception\GuzzleException
+	 */
+	public function getChainCorpInfoList(array $data)
+	{
+		return $this->httpPostJson('cgi-bin/corpgroup/corp/get_chain_corpinfo_list', $data);
+	}
+
+	/**
+	 * 获取企业上下游通讯录下的企业信息
+	 * @param array $data
+	 * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+	 * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+	 * @throws \GuzzleHttp\Exception\GuzzleException
+	 */
+	public function getChainCorpInfo(array $data)
+	{
+		return $this->httpPostJson('cgi-bin/corpgroup/corp/get_chain_corpinfo', $data);
+	}
 }
