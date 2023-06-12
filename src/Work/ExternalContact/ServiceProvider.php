@@ -57,5 +57,9 @@ class ServiceProvider implements ServiceProviderInterface
         $app['moment'] = function ($app){
             return new Moment($app);
         };
+
+	    $app['acquisition'] = function ($app){
+		    return new Acquisition($app);
+	    };
     }
 }

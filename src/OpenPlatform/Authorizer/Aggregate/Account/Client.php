@@ -93,4 +93,15 @@ class Client extends BaseClient
 
         return $this->httpPostJson('cgi-bin/open/get', $params);
     }
+
+	/**
+	 * 查询开放平台帐号是否与小程序同主体
+	 * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+	 * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+	 * @throws \GuzzleHttp\Exception\GuzzleException
+	 */
+	public function sameentity()
+	{
+		return $this->httpGet('cgi-bin/open/sameentity');
+	}
 }
