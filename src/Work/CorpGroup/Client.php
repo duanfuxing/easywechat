@@ -33,6 +33,18 @@ class Client extends BaseClient
 	}
 
 	/**
+	 * 获取下级/下游企业的access_token
+	 * @param array $data
+	 * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+	 * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+	 * @throws \GuzzleHttp\Exception\GuzzleException
+	 */
+	public function getToken(array $data)
+	{
+		return $this->httpPostJson('cgi-bin/corpgroup/corp/gettoken', $data);
+	}
+
+	/**
 	 * unionid 查询 ExternalUserid
 	 * 上下游关联客户信息-已添加客户
 	 * @param int $id
