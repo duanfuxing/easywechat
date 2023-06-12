@@ -105,7 +105,7 @@ class Acquisition extends BaseClient
 	 * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
 	 * @throws \GuzzleHttp\Exception\GuzzleException
 	 */
-	public function getMomentSendResult()
+	public function acquisitionQuota()
 	{
 		return $this->httpGet('cgi-bin/externalcontact/customer_acquisition_quota');
 	}

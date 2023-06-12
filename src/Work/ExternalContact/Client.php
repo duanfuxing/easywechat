@@ -34,6 +34,18 @@ class Client extends BaseClient
         return $this->httpGet('cgi-bin/externalcontact/get_follow_user_list');
     }
 
+	/**
+	 * 检查用户是否配置了客户联系功能使用权限
+	 * @param array $params
+	 * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+	 * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+	 * @throws \GuzzleHttp\Exception\GuzzleException
+	 */
+	public function checkFollowUser(array $params)
+	{
+		return $this->httpPostJson('cgi-bin/externalcontact/check_follow_user', $params);
+	}
+
     /**
      * 获取外部联系人列表.
      *
