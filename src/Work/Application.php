@@ -75,6 +75,7 @@ class Application extends ServiceContainer
 		MsgAudit\ServiceProvider::class,
 		Live\ServiceProvider::class,
 		CorpGroup\ServiceProvider::class,
+		WechatKf\ServiceProvider::class,
 	];
 
 	/**
