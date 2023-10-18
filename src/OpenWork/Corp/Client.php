@@ -175,7 +175,7 @@ class Client extends BaseClient
             'code' => $code,
         ];
 
-        return $this->httpGet('cgi-bin/service/getuserinfo3rd', $params);
+        return $this->httpGet('cgi-bin/service/auth/getuserinfo3rd', $params);
     }
 
     /**
@@ -192,7 +192,7 @@ class Client extends BaseClient
             'user_ticket' => $userTicket,
         ];
 
-        return $this->httpPostJson('cgi-bin/service/getuserdetail3rd', $params);
+        return $this->httpPostJson('cgi-bin/service/auth/getuserdetail3rd', $params);
     }
 
 
