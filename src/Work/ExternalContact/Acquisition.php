@@ -110,4 +110,54 @@ class Acquisition extends BaseClient
 		return $this->httpGet('cgi-bin/externalcontact/customer_acquisition_quota');
 	}
 
+    /**
+     * 获取组件授权信息
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+	public function get_comp_auth_info()
+	{
+		return $this->httpPostJson('cgi-bin/externalcontact/customer_acquisition/get_comp_auth_info');
+	}
+
+    /**
+     * 查询链接使用详情
+     * @param array $params
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+	public function statistic(array $params)
+	{
+        return $this->httpPostJson('cgi-bin/externalcontact/customer_acquisition/statistic', $params);
+
+    }
+
+    /**
+     * 生成代支付key
+     * @param array $params
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+	public function create_once_key(array $params)
+	{
+        return $this->httpPostJson('cgi-bin/externalcontact/customer_acquisition/create_once_key', $params);
+
+    }
+
+    /**
+     * 获取代支付流水
+     * @param array $params
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function get_bill_list(array $params)
+	{
+        return $this->httpPostJson('cgi-bin/externalcontact/customer_acquisition/get_bill_list', $params);
+
+    }
+
 }
